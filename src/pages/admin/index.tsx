@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
+import AdminNav from "../../components/AdminNav";
 import PageLayout from "../../components/PageLayout";
 import { getServerAuthSession } from "../../server/auth";
 
@@ -10,6 +11,7 @@ const AdminIndex: NextPage = () => {
         <title>Sundial - Administration</title>
       </Head>
       <PageLayout>
+        <AdminNav />
         {/* todo: admin layout */}
       </PageLayout>
     </>
