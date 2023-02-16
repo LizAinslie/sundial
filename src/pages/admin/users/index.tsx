@@ -40,6 +40,7 @@ const AdminUsersList: NextPage = () => {
     <>
       <Head>
         <title>Users - Sundial Admin</title>
+        <meta name="theme-color" content="#bae6fd" />
       </Head>
       <PageLayout>
         <AdminNav />

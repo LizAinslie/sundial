@@ -18,12 +18,7 @@ const Home: NextPage = () => {
       </Head>
       <PageLayout>
         <GpsGate>
-          <MapTile
-            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
-            mapElement={<div className="rounded-md" />}
-            containerElement={<div className="h-[25vh]" />}
-            loadingElement={<div />}
-          />
+          <MapTile />
         </GpsGate>
       </PageLayout>
     </>

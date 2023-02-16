@@ -37,17 +37,16 @@ const CreateUserPage: NextPage = () => {
     <>
       <Head>
         <title>New User - Sundial Admin</title>
+        <meta name="theme-color" content="#bae6fd" />
       </Head>
       <PageLayout>
         <AdminHeader>
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-row gap-4 items-center">
             <Link href='/admin/users' className="bg-sky-500 hover:bg-sky-600 text-white rounded-md p-3 flex flex-row items-center gap-2">
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />
             </Link>
 
-            <div className="flex flex-col flex-grow">
-              <h1 className="text-3xl">New User</h1>
-            </div>
+            <h1 className="text-2xl">New User</h1>
           </div>
         </AdminHeader>
         {submitted ? <>

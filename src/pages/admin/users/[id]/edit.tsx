@@ -21,6 +21,7 @@ const EditUserPage: NextPage<EditUserPageProps> = ({ user: serverUser }) => {
     <>
       <Head>
         <title>Edit User - Sundial Admin</title>
+        <meta name="theme-color" content="#bae6fd" />
       </Head>
       <PageLayout>
         <AdminHeader>

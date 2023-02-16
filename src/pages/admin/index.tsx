@@ -9,6 +9,7 @@ const AdminIndex: NextPage = () => {
     <>
       <Head>
         <title>Sundial Admin</title>
+        <meta name="theme-color" content="#bae6fd" />
       </Head>
       <PageLayout>
         <AdminNav />

@@ -6,7 +6,9 @@ const GpsGate: FC<PropsWithChildren> = ({ children }) => {
 	const [askLocation, setAskLocation] = useState(true);
 	const [location, setLocation] = useState<EnrichedGeolocationCoordinates>(defaultLocation);
 
-	useGeolocation({}, (loc) => {
+	useGeolocation({
+		enableHighAccuracy: true,
+	}, (loc) => {
 		setLocation(loc);
 		setAskLocation(false);
 	}, askLocation);
