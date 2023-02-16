@@ -8,7 +8,7 @@ const AdminIndex: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Sundial - Administration</title>
+        <title>Sundial Admin</title>
       </Head>
       <PageLayout>
         <AdminNav />

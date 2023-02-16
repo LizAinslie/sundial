@@ -46,14 +46,14 @@ export const authOptions: NextAuthOptions = {
           admin: tokenUser.admin,
         }
       }
-      console.log(session)
+      // console.log(session)
 
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
         const prismaUser = await prisma.user.findUnique({ where: { id: user.id } })
-        console.log('jwt user', prismaUser);
+        // console.log('jwt user', prismaUser);
         token.user = user;
       }
       return token;

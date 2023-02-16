@@ -1,7 +1,39 @@
+import { hashSync } from "bcrypt";
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import generateStrongPassword from "../../../utils/generateStrongPassword";
+import { stripUser } from "../../../utils/stripSensitiveValues";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const adminRouter = createTRPCRouter({
-  getAllSites: protectedProcedure.query(({ ctx }) => {
+  getSites: protectedProcedure.query(async ({ ctx }) => {
+    const sites = await ctx.prisma.site.findMany();
+    return sites;
+  }),
+  getUsers: protectedProcedure.query(async ({ ctx }) => {
+    const users = await ctx.prisma.user.findMany();
+    
+    // return a list of users with password hashes stripped
+    return users.map(stripUser);
+  }),
+
+  createeUser: protectedProcedure.input(z.object({
+    username: z.string().max(32),
+  })).mutation(async ({ ctx, input }) => {
+    // Generate a password
+    const password = generateStrongPassword();
+    
+    // hash password & create user
+    const newUser = await ctx.prisma.user.create({
+      data: {
+        username: input.username,
+        passwordHash: hashSync(password, 12),
+      },
+    });
+
+    // send the user id and generated password back to client
+    return {
+      userId: newUser.id,
+      password,
+    };
   }),
 });
