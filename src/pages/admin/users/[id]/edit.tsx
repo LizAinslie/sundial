@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ChangeEvent, useState } from "react";
 import AdminHeader from "../../../../components/AdminHeader";
 import PageLayout from "../../../../components/PageLayout";
+import { getServerAuthSession } from "../../../../server/auth";
 import { prisma } from "../../../../server/db";
 import { StrippedUser } from "../../../../utils/stripSensitiveValues";
 
@@ -33,16 +34,25 @@ const EditUserPage: NextPage<EditUserPageProps> = ({ user: serverUser }) => {
               <span className="text-sm">{user.id}</span>
             </div>
           </div>
-        </AdminHeader>        
+        </AdminHeader>
       </PageLayout>
     </>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<EditUserPageProps> = async ({ params }) => {
-  const userId = params!.id as string;
-  console.log('id', userId);
+export const getServerSideProps: GetServerSideProps<EditUserPageProps> = async ({ params, req, res }) => {
+  // admins only
+  const session = await getServerAuthSession({ req, res });
+  if (!session?.user.admin) return {
+    redirect: {
+      destination: '/',
+      permanent: false,
+    },
+  };
 
+  const userId = params!.id as string;
+
+  // look user up in db
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) return {
     notFound: true,

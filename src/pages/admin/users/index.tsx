@@ -52,8 +52,8 @@ const AdminUsersList: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  // admins only
   const session = await getServerAuthSession({ req, res });
-
   if (!(session?.user.admin)) return {
     redirect: {
       destination: '/',
