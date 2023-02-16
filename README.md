@@ -1,5 +1,7 @@
 # Sundial
-Sundial. More info soon.
+Sundial is a location-aware time tracking app built for Energy Solution
+Providers, an Arizona solar company.
 
 ## License
-&copy; Elizabeth Hazel Ainslie 2023, all rights reserved. Do not distribute!
+The source code for Sundial is licenced under the [MIT License](LICENSE).
+Copyright &copy; 2023 Elizabeth Hazel Ainslie.
