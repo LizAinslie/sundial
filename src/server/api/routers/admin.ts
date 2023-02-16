@@ -16,7 +16,7 @@ export const adminRouter = createTRPCRouter({
     return users.map(stripUser);
   }),
 
-  createeUser: protectedProcedure.input(z.object({
+  createUser: protectedProcedure.input(z.object({
     username: z.string().max(32),
   })).mutation(async ({ ctx, input }) => {
     // Generate a password
