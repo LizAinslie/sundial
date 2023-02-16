@@ -33,6 +33,9 @@ model User {
     username String @db.VarChar(32) @unique
     admin Boolean @default(false)
     passwordHash String
+    // whether or not the password should be forced to change next login
+    expirePassword Boolean @default(false)
+
     sessions Session[]
 }
 

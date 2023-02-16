@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { api } from "../utils/api";
 import PageLayout from "../components/PageLayout";
 import GpsGate from "../components/GpsGate";
+import MapTile from "../components/MapTile";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
@@ -17,7 +18,12 @@ const Home: NextPage = () => {
       </Head>
       <PageLayout>
         <GpsGate>
-          Perm granted
+          <MapTile
+            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
+            mapElement={<div className="rounded-md" />}
+            containerElement={<div className="h-[25vh]" />}
+            loadingElement={<div />}
+          />
         </GpsGate>
       </PageLayout>
     </>
