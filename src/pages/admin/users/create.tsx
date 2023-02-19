@@ -56,6 +56,10 @@ const AdminUserCreationPage: NextPage = () => {
             <div className="bg-sky-300 px-4 py-3 font-bold font-monospace mt-2 cursor-pointer" onClick={copyPassword}>
               {createdPassword}
             </div>
+
+            <Link href={`/admin/users/${newUserId}`} className="rounded-md text-white bg-sky-500 hover:bg-sky-600 px-4 py-3 flex flex-row justify-center align-self-center mt-4" type="submit">
+              Go to User
+            </Link>
           </div>
         </> : <>
           <form className="p-4 flex flex-col flex-grow gap-4" onSubmit={handleSubmit}>
