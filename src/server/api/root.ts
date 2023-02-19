@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "./trpc";
 import { adminRouter } from "./routers/admin";
 import { sitesRouter } from "./routers/sites";
+import { timeClockRouter } from "./routers/timeClock";
 
 /**
  * This is the primary router for your server.
@@ -10,6 +11,7 @@ import { sitesRouter } from "./routers/sites";
 export const appRouter = createTRPCRouter({
   admin: adminRouter,
   sites: sitesRouter,
+  timeClock: timeClockRouter,
 });
 
 // export type definition of API
