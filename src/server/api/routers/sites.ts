@@ -18,7 +18,7 @@ export const sitesRouter = createTRPCRouter({
         name: input.name,
         address: input.address,
         lat: input.lat,
-        lon:input.lon,
+        lon: input.lon,
       },
     });
 
