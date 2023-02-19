@@ -18,14 +18,24 @@ type SiteCardProps = {
 const SiteCard: FC<SiteCardProps> = ({ site }) => {
   return (
     <>
-      <div className="bg-sky-200 rounded-md p-2 flex flex-row">
-        <div className="flex flex-col flex-grow">
-          <span className="font-bold">{site.name}{(!site.enabled) && ' (disabled)'}</span>
+      <div className="flex flex-row rounded-md bg-sky-200 p-2">
+        <div className="flex flex-grow flex-col">
+          <span className="font-bold">
+            {site.name}
+            {!site.enabled && " (disabled)"}
+          </span>
           <span className="text-sm">{site.id}</span>
         </div>
-        <div className="flex flex-row h-full items-center">
-          <Link href={`/admin/sites/${site.id}/edit`} className="py-2.5 px-3.5 rounded-md hover:bg-opacity-50 hover:bg-sky-300 aspect-square">
-            <FontAwesomeIcon fixedWidth className="leading-none align-middle" icon={faPencil} />
+        <div className="flex h-full flex-row items-center">
+          <Link
+            href={`/admin/sites/${site.id}/edit`}
+            className="aspect-square rounded-md py-2.5 px-3.5 hover:bg-sky-300 hover:bg-opacity-50"
+          >
+            <FontAwesomeIcon
+              fixedWidth
+              className="align-middle leading-none"
+              icon={faPencil}
+            />
           </Link>
         </div>
       </div>
@@ -45,7 +55,8 @@ const AdminSitesPage: FC = () => {
       <PageLayout>
         <AdminNav />
         <AdminList create="/admin/sites/create">
-          {sitesQuery.data && sitesQuery.data.map((it) => (<SiteCard site={it} />))}
+          {sitesQuery.data &&
+            sitesQuery.data.map((it) => <SiteCard site={it} />)}
         </AdminList>
       </PageLayout>
     </>
@@ -55,18 +66,17 @@ const AdminSitesPage: FC = () => {
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   // admins only
   const session = await getServerAuthSession({ req, res });
-  if (!session?.user.admin) return {
-    redirect: {
-      destination: '/',
-      permanent: false,
-    },
-  };
+  if (!session?.user.admin)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
 
   return {
     props: {},
   };
 };
 
-
 export default AdminSitesPage;
-

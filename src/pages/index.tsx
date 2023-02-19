@@ -18,7 +18,7 @@ const Home: NextPage = () => {
       </Head>
       <PageLayout>
         <GpsGate>
-          <div className="flex flex-col p-4 gap-4 flex-grow">
+          <div className="flex flex-grow flex-col gap-4 p-4">
             <MapTile />
           </div>
         </GpsGate>
@@ -28,4 +28,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-

@@ -9,37 +9,44 @@ export const adminRouter = createTRPCRouter({
     if (!ctx.session.user.admin) throw "Admin only.";
 
     const users = await ctx.prisma.user.findMany();
-    
+
     // return a list of users with password hashes stripped
     return users.map(stripUser);
   }),
 
-  createUser: protectedProcedure.input(z.object({
-    username: z.string().max(32),
-  })).mutation(async ({ ctx, input }) => {
-    if (!ctx.session.user.admin) throw "Admin only.";
-    // Generate a password
-    const password = generateStrongPassword();
-    
-    // hash password & create user
-    const newUser = await ctx.prisma.user.create({
-      data: {
-        username: input.username,
-        passwordHash: hashSync(password, 12),
-      },
-    });
+  createUser: protectedProcedure
+    .input(
+      z.object({
+        username: z.string().max(32),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.session.user.admin) throw "Admin only.";
+      // Generate a password
+      const password = generateStrongPassword();
 
-    // send the user id and generated password back to client
-    return {
-      userId: newUser.id,
-      password,
-    };
-  }),
+      // hash password & create user
+      const newUser = await ctx.prisma.user.create({
+        data: {
+          username: input.username,
+          passwordHash: hashSync(password, 12),
+        },
+      });
 
-  createSite: protectedProcedure.input(z.object({
-    name: z.string(),
-    lat: z.number(),
-    lon: z.number(),
-  })).mutation(async ({ ctx }) => {
-  }),
+      // send the user id and generated password back to client
+      return {
+        userId: newUser.id,
+        password,
+      };
+    }),
+
+  createSite: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        lat: z.number(),
+        lon: z.number(),
+      })
+    )
+    .mutation(async ({ ctx }) => {}),
 });

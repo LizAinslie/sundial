@@ -44,7 +44,7 @@ export const authOptions: NextAuthOptions = {
           username: tokenUser.username,
           id: tokenUser.id,
           admin: tokenUser.admin,
-        }
+        };
       }
       // console.log(session)
 
@@ -52,7 +52,9 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-        const prismaUser = await prisma.user.findUnique({ where: { id: user.id } })
+        const prismaUser = await prisma.user.findUnique({
+          where: { id: user.id },
+        });
         // console.log('jwt user', prismaUser);
         token.user = user;
       }
@@ -62,11 +64,15 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   adapter: PrismaAdapter(prisma),
   providers: [
-    CredentialsProvider({ 
-      name: "Credentials", 
+    CredentialsProvider({
+      name: "Credentials",
       credentials: {
         username: { label: "Username", type: "text", placeholder: "Username" },
-        password: { label: "Password", type: "password", placeholder: "Password" }
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "Password",
+        },
       },
       async authorize(credentials, _) {
         if (!credentials) return null;
@@ -81,10 +87,11 @@ export const authOptions: NextAuthOptions = {
         if (!user) return null;
 
         // check pw
-        if (bcrypt.compareSync(credentials.password, user.passwordHash)) return user;
+        if (bcrypt.compareSync(credentials.password, user.passwordHash))
+          return user;
         else return null;
-      }
-    })
+      },
+    }),
   ],
 };
 

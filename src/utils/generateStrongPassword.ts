@@ -1,7 +1,8 @@
-const chars = '0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const chars =
+  "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export default function generateStrongPassword(length = 32): string {
-  let password = '';
+  let password = "";
 
   for (let i = 0; i < length; i++) {
     let idx = Math.floor(Math.random() * chars.length);
@@ -10,4 +11,3 @@ export default function generateStrongPassword(length = 32): string {
 
   return password;
 }
-

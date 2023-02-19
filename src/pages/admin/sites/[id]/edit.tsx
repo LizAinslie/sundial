@@ -26,12 +26,18 @@ const EditSitePage: NextPage<EditSitePageProps> = ({ site: serverSite }) => {
       <PageLayout>
         <AdminHeader>
           <div className="flex flex-row gap-4">
-            <Link href='/admin/users' className="bg-sky-500 hover:bg-sky-600 text-white rounded-md p-3 flex flex-row items-center gap-2">
+            <Link
+              href="/admin/users"
+              className="flex flex-row items-center gap-2 rounded-md bg-sky-500 p-3 text-white hover:bg-sky-600"
+            >
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />
             </Link>
 
-            <div className="flex flex-col flex-grow">
-              <span className="font-bold">Editing {site.name}{(!site.enabled) && ' (disabled)'}</span>
+            <div className="flex flex-grow flex-col">
+              <span className="font-bold">
+                Editing {site.name}
+                {!site.enabled && " (disabled)"}
+              </span>
               <span className="text-sm">{site.id}</span>
             </div>
           </div>
@@ -41,23 +47,27 @@ const EditSitePage: NextPage<EditSitePageProps> = ({ site: serverSite }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<EditSitePageProps> = async ({ params, req, res }) => {
+export const getServerSideProps: GetServerSideProps<
+  EditSitePageProps
+> = async ({ params, req, res }) => {
   // admins only
   const session = await getServerAuthSession({ req, res });
-  if (!session?.user.admin) return {
-    redirect: {
-      destination: '/',
-      permanent: false,
-    },
-  };
+  if (!session?.user.admin)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
 
   const siteId = params!.id as string;
 
   // look user up in db
   const site = await prisma.site.findUnique({ where: { id: siteId } });
-  if (!site) return {
-    notFound: true,
-  };
+  if (!site)
+    return {
+      notFound: true,
+    };
 
   return {
     props: {
@@ -67,4 +77,3 @@ export const getServerSideProps: GetServerSideProps<EditSitePageProps> = async (
 };
 
 export default EditSitePage;
-

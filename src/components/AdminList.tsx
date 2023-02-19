@@ -9,8 +9,11 @@ type AdminListProps = {
 
 const AdminList: FC<AdminListProps> = ({ children, create }) => {
   return (
-    <div className="flex flex-grow flex-col gap-4 p-4">    
-      <Link href={create} className="flex flex-row gap-2 items-center justify-center bg-sky-500 hover:bg-sky-600 rounded-md px-4 py-3 text-white">
+    <div className="flex flex-grow flex-col gap-4 p-4">
+      <Link
+        href={create}
+        className="flex flex-row items-center justify-center gap-2 rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600"
+      >
         <FontAwesomeIcon fixedWidth icon={faPlus} />
         Create
       </Link>
@@ -22,4 +25,3 @@ const AdminList: FC<AdminListProps> = ({ children, create }) => {
 };
 
 export default AdminList;
-

@@ -11,8 +11,8 @@ import { getServerAuthSession } from "../../../server/auth";
 import { api } from "../../../utils/api";
 
 const AdminSiteCreationPage: FC = () => {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
   const [lat, setLat] = useState(0);
   const [lon, setLon] = useState(0);
 
@@ -24,9 +24,10 @@ const AdminSiteCreationPage: FC = () => {
     e.preventDefault();
 
     const siteId = await createSiteMutation.mutateAsync({
-      name: name === '' ? undefined : name,
+      name: name === "" ? undefined : name,
       address,
-      lat, lon,
+      lat,
+      lon,
     });
 
     router.push(`/admin/sites/${siteId}`);
@@ -40,25 +41,36 @@ const AdminSiteCreationPage: FC = () => {
       </Head>
       <PageLayout>
         <AdminHeader>
-          <div className="flex flex-row gap-4 items-center">
-            <Link href='/admin/users' className="bg-sky-500 hover:bg-sky-600 text-white rounded-md p-3 flex flex-row items-center gap-2">
+          <div className="flex flex-row items-center gap-4">
+            <Link
+              href="/admin/users"
+              className="flex flex-row items-center gap-2 rounded-md bg-sky-500 p-3 text-white hover:bg-sky-600"
+            >
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />
             </Link>
 
             <h1 className="text-2xl">Create Site</h1>
           </div>
         </AdminHeader>
-        <form className="p-4 flex flex-col flex-grow gap-4" onSubmit={handleSubmit}>
+        <form
+          className="flex flex-grow flex-col gap-4 p-4"
+          onSubmit={handleSubmit}
+        >
           <input
-            className="autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)] rounded-md bg-white border-none outline-none focus:border-none focus:outline-none focus:ring-sky-500 focus:ring-2 px-4 py-3"
+            className="rounded-md border-none bg-white px-4 py-3 outline-none autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)] focus:border-none focus:outline-none focus:ring-2 focus:ring-sky-500"
             value={name}
-            onChange={(e: ChangeEvent) => void setName((e.target as HTMLInputElement).value)}
-            type='text'
-            name='name'
+            onChange={(e: ChangeEvent) =>
+              void setName((e.target as HTMLInputElement).value)
+            }
+            type="text"
+            name="name"
             placeholder="Site name"
           />
           {/* todo: address lookup / lat-lon-address inputs */}
-          <button className="rounded-md text-white bg-sky-500 hover:bg-sky-600 px-4 py-3 flex flex-row justify-center" type="submit">
+          <button
+            className="flex flex-row justify-center rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600"
+            type="submit"
+          >
             Create Site
           </button>
         </form>
@@ -70,18 +82,17 @@ const AdminSiteCreationPage: FC = () => {
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   // admins only
   const session = await getServerAuthSession({ req, res });
-  if (!session?.user.admin) return {
-    redirect: {
-      destination: '/',
-      permanent: false,
-    },
-  };
+  if (!session?.user.admin)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
 
   return {
     props: {},
   };
 };
 
-
 export default AdminSiteCreationPage;
-
