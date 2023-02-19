@@ -18,6 +18,7 @@ model Site {
     address String @db.Text
     name String? @db.Text
     enabled Boolean @default(true)
+    events Event[]
 }
 
 model Session {
@@ -37,5 +38,23 @@ model User {
     expirePassword Boolean @default(false)
 
     sessions Session[]
+    events Event[]
 }
 
+enum EventType {
+    CLOCK_IN
+    CLOCK_OUT
+    BREAK_OUT
+    BREAK_IN
+}
+
+model Event {
+    id String @id @default(cuid())
+    userId String
+    siteId String
+    time DateTime
+    type EventType
+
+    user User @relation(fields: [userId], references: [id], onDelete: NoAction)
+    site Site @relation(fields: [siteId], references: [id], onDelete: NoAction)
+}

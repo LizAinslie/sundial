@@ -18,7 +18,9 @@ const Home: NextPage = () => {
       </Head>
       <PageLayout>
         <GpsGate>
-          <MapTile />
+          <div className="flex flex-col p-4 gap-4 flex-grow">
+            <MapTile />
+          </div>
         </GpsGate>
       </PageLayout>
     </>

@@ -29,7 +29,7 @@ const MapTile: FC = () => {
 
   return isLoaded ? (
       <GoogleMap
-        mapContainerStyle={{ width: '100%', height: '25vh' }}
+        mapContainerStyle={{ width: '100%', height: '25vh', borderRadius: '0.375rem' }}
         center={{ lat: location.latitude, lng: location.longitude }}
         zoom={10}
         onLoad={onLoad}
