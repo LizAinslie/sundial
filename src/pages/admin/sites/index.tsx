@@ -1,5 +1,8 @@
+import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Site } from "@prisma/client";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import AdminList from "../../../components/AdminList";
@@ -11,9 +14,21 @@ type SiteCardProps = {
   site: Site;
 };
 
-  const SiteCard: FC<SiteCardProps> = ({ site }) => {
+const SiteCard: FC<SiteCardProps> = ({ site }) => {
   return (
-    <></>
+    <>
+      <div className="bg-sky-200 rounded-md p-2 flex flex-row">
+        <div className="flex flex-col flex-grow">
+          <span className="font-bold">{site.name}{(!site.enabled) && ' (disabled)'}</span>
+          <span className="text-sm">{site.id}</span>
+        </div>
+        <div className="flex flex-row h-full items-center">
+          <Link href={`/admin/sites/${site.id}/edit`} className="py-2.5 px-3.5 rounded-md hover:bg-opacity-50 hover:bg-sky-300 aspect-square">
+            <FontAwesomeIcon fixedWidth className="leading-none align-middle" icon={faPencil} />
+          </Link>
+        </div>
+      </div>
+    </>
   );
 };
 
