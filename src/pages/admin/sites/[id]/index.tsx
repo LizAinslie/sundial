@@ -1,23 +1,24 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Site } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import AdminHeader from "../../../../components/AdminHeader";
+import MapTile from "../../../../components/MapTile";
 import PageLayout from "../../../../components/PageLayout";
 import { getServerAuthSession } from "../../../../server/auth";
 import { prisma } from "../../../../server/db";
-import { StrippedUser } from "../../../../utils/stripSensitiveValues";
 
-type ViewUserPageProps = {
-  user: StrippedUser;
+type ViewSitePageProps = {
+  site: Site;
 };
 
-const ViewUserPage: NextPage<ViewUserPageProps> = ({ user }) => {
+const ViewSitePage: NextPage<ViewSitePageProps> = ({ site }) => {
   return (
     <>
       <Head>
-        <title>User {user.username} - Sundial Admin</title>
+        <title>Site {site.name} - Sundial Admin</title>
         <meta name="theme-color" content="#bae6fd" />
       </Head>
       <PageLayout>
@@ -32,21 +33,21 @@ const ViewUserPage: NextPage<ViewUserPageProps> = ({ user }) => {
 
             <div className="flex flex-grow flex-col">
               <span className="font-bold">
-                Viewing {user.username}
-                {user.admin && " (admin)"}
+                Viewing {site.name}
+                {(!site.enabled) && " (disabled)"}
               </span>
-              <span className="text-sm">{user.id}</span>
+              <span className="text-sm">{site.id}</span>
             </div>
           </div>
         </AdminHeader>
-        {/* todo: user feed */}
+        <MapTile lat={site.lat} lon={site.lon} />
       </PageLayout>
     </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps<
-  ViewUserPageProps
+  ViewSitePageProps
 > = async ({ params, req, res }) => {
   // admins only
   const session = await getServerAuthSession({ req, res });
@@ -58,20 +59,19 @@ export const getServerSideProps: GetServerSideProps<
       },
     };
 
-  const userId = params!.id as string;
+  const siteId = params!.id as string;
 
   // look user up in db
-  const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (!user)
+  const site = await prisma.site.findUnique({ where: { id: siteId } });
+  if (!site)
     return {
       notFound: true,
     };
 
   return {
     props: {
-      user: JSON.parse(JSON.stringify(user)),
+      site: JSON.parse(JSON.stringify(site)),
     },
   };
 };
 
-export default ViewUserPage;
