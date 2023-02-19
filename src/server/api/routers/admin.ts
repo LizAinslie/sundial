@@ -6,6 +6,8 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const adminRouter = createTRPCRouter({
   getUsers: protectedProcedure.query(async ({ ctx }) => {
+    if (!ctx.session.user.admin) throw "Admin only.";
+
     const users = await ctx.prisma.user.findMany();
     
     // return a list of users with password hashes stripped
@@ -15,6 +17,7 @@ export const adminRouter = createTRPCRouter({
   createUser: protectedProcedure.input(z.object({
     username: z.string().max(32),
   })).mutation(async ({ ctx, input }) => {
+    if (!ctx.session.user.admin) throw "Admin only.";
     // Generate a password
     const password = generateStrongPassword();
     
