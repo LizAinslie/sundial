@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { FC, useState } from "react";
+import { ChangeEvent, FC, FormEvent, useState } from "react";
 import AdminHeader from "../../../components/AdminHeader";
 import PageLayout from "../../../components/PageLayout";
 import { getServerAuthSession } from "../../../server/auth";
@@ -13,6 +13,10 @@ const AdminSiteCreationPage: FC = () => {
   const [address, setAddress] = useState('');
   const [lat, setLat] = useState(0);
   const [lon, setLon] = useState(0);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+  }
 
   return (
     <>
@@ -30,6 +34,20 @@ const AdminSiteCreationPage: FC = () => {
             <h1 className="text-2xl">Create Site</h1>
           </div>
         </AdminHeader>
+        <form className="p-4 flex flex-col flex-grow gap-4" onSubmit={handleSubmit}>
+          <input
+            className="autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)] rounded-md bg-white border-none outline-none focus:border-none focus:outline-none focus:ring-sky-500 focus:ring-2 px-4 py-3"
+            value={name}
+            onChange={(e: ChangeEvent) => void setName((e.target as HTMLInputElement).value)}
+            type='text'
+            name='name'
+            placeholder="Site name"
+          />
+          {/* todo: address lookup / lat-lon-address inputs */}
+          <button className="rounded-md text-white bg-sky-500 hover:bg-sky-600 px-4 py-3 flex flex-row justify-center" type="submit">
+            Create Site
+          </button>
+        </form>
       </PageLayout>
     </>
   );
