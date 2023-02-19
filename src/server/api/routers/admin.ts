@@ -5,10 +5,6 @@ import { stripUser } from "../../../utils/stripSensitiveValues";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const adminRouter = createTRPCRouter({
-  getSites: protectedProcedure.query(async ({ ctx }) => {
-    const sites = await ctx.prisma.site.findMany();
-    return sites;
-  }),
   getUsers: protectedProcedure.query(async ({ ctx }) => {
     const users = await ctx.prisma.user.findMany();
     
