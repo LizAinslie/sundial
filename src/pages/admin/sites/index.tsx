@@ -35,3 +35,6 @@ const AdminSitesPage: FC = () => {
     </>
   );
 };
+
+export default AdminSitesPage;
+
