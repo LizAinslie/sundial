@@ -1,9 +1,8 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { FC } from "react";
 import AdminHeader from "../../../../components/AdminHeader";
 import PageLayout from "../../../../components/PageLayout";
 import { getServerAuthSession } from "../../../../server/auth";
@@ -14,7 +13,7 @@ type ViewUserPageProps = {
   user: StrippedUser;
 };
 
-const ViewUserPage: FC<ViewUserPageProps> = ({ user }) => {
+const ViewUserPage: NextPage<ViewUserPageProps> = ({ user }) => {
   return (
     <>
       <Head>

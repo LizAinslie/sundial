@@ -1,16 +1,16 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ChangeEvent, FC, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import AdminHeader from "../../../components/AdminHeader";
 import PageLayout from "../../../components/PageLayout";
 import { getServerAuthSession } from "../../../server/auth";
 import { api } from "../../../utils/api";
 
-const AdminSiteCreationPage: FC = () => {
+const AdminSiteCreationPage: NextPage = () => {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState(0);

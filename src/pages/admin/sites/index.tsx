@@ -1,7 +1,7 @@
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Site } from "@prisma/client";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { FC } from "react";
@@ -43,7 +43,7 @@ const SiteCard: FC<SiteCardProps> = ({ site }) => {
   );
 };
 
-const AdminSitesPage: FC = () => {
+const AdminSitesPage: NextPage = () => {
   const sitesQuery = api.sites.getSites.useQuery();
 
   return (
