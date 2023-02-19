@@ -11,7 +11,7 @@ type SiteCardProps = {
   site: Site;
 };
 
-const SiteCard: FC<SiteCardProps = ({ site }) => {
+  const SiteCard: FC<SiteCardProps> = ({ site }) => {
   return (
     <></>
   );
@@ -28,8 +28,8 @@ const AdminSitesPage: FC = () => {
       </Head>
       <PageLayout>
         <AdminNav />
-        <AdminList create={() => void router.push('/admin/sites/create'}>
-          {sitesQuery.data && sites.map((it) => (<SiteCard site={it} />))}
+        <AdminList create={() => void router.push('/admin/sites/create')}>
+          {sitesQuery.data && sitesQuery.data.map((it) => (<SiteCard site={it} />))}
         </AdminList>
       </PageLayout>
     </>
