@@ -42,6 +42,7 @@ const AdminSitesPage: FC = () => {
     <>
       <Head>
         <title>Sites - Sundial Admin</title>
+        <meta name="theme-color" content="#bae6fd" />
       </Head>
       <PageLayout>
         <AdminNav />

@@ -36,7 +36,7 @@ const AdminUserCreationPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>New User - Sundial Admin</title>
+        <title>Create User - Sundial Admin</title>
         <meta name="theme-color" content="#bae6fd" />
       </Head>
       <PageLayout>
@@ -46,7 +46,7 @@ const AdminUserCreationPage: NextPage = () => {
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />
             </Link>
 
-            <h1 className="text-2xl">New User</h1>
+            <h1 className="text-2xl">Create User</h1>
           </div>
         </AdminHeader>
         {submitted ? <>
