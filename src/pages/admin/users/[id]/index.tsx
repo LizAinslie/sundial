@@ -24,7 +24,7 @@ const ViewUserPage: NextPage<ViewUserPageProps> = ({ user }) => {
           <div className="flex flex-row gap-4">
             <Link
               href="/admin/users"
-              className="flex flex-row items-center gap-2 rounded-md bg-sky-500 p-3 text-white hover:bg-sky-600"
+              className="flex flex-row items-center gap-2 rounded-md bg-sky-500 p-3 text-white hover:bg-sky-600 transition-colors"
             >
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />
             </Link>

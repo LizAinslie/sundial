@@ -12,7 +12,7 @@ const AdminList: FC<AdminListProps> = ({ children, create }) => {
     <div className="flex flex-grow flex-col gap-4 p-4">
       <Link
         href={create}
-        className="flex flex-row items-center justify-center gap-2 rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600"
+        className="flex flex-row items-center justify-center gap-2 rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600 transition-colors"
       >
         <FontAwesomeIcon fixedWidth icon={faPlus} />
         Create

@@ -44,7 +44,7 @@ const AdminUserCreationPage: NextPage = () => {
           <div className="flex flex-row items-center gap-4">
             <Link
               href="/admin/users"
-              className="flex flex-row items-center gap-2 rounded-md bg-sky-500 p-3 text-white hover:bg-sky-600"
+              className="flex flex-row items-center gap-2 rounded-md bg-sky-500 p-3 text-white hover:bg-sky-600 transition-colors"
             >
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />
             </Link>
@@ -68,7 +68,7 @@ const AdminUserCreationPage: NextPage = () => {
 
               <Link
                 href={`/admin/users/${newUserId}`}
-                className="align-self-center mt-4 flex flex-row justify-center rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600"
+                className="align-self-center mt-4 flex flex-row justify-center rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600 transition-colors"
                 type="submit"
               >
                 Go to User
@@ -92,7 +92,7 @@ const AdminUserCreationPage: NextPage = () => {
                 placeholder="Username"
               />
               <button
-                className="flex flex-row justify-center rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600"
+                className="flex flex-row justify-center rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600 transition-colors"
                 type="submit"
               >
                 Create User

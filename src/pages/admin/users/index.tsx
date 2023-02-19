@@ -28,7 +28,7 @@ const UserCard: FC<UserCardProps> = ({ user }) => {
       <div className="flex h-full flex-row items-center">
         <Link
           href={`/admin/users/${user.id}/edit`}
-          className="aspect-square rounded-md py-2.5 px-3.5 hover:bg-sky-300 hover:bg-opacity-50"
+          className="aspect-square rounded-md py-2.5 px-3.5 hover:bg-sky-300 hover:bg-opacity-50 transition-colors"
         >
           <FontAwesomeIcon
             fixedWidth

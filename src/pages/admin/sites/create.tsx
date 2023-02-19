@@ -44,7 +44,7 @@ const AdminSiteCreationPage: NextPage = () => {
           <div className="flex flex-row items-center gap-4">
             <Link
               href="/admin/users"
-              className="flex flex-row items-center gap-2 rounded-md bg-sky-500 p-3 text-white hover:bg-sky-600"
+              className="flex flex-row items-center gap-2 rounded-md bg-sky-500 p-3 text-white hover:bg-sky-600 transition-colors"
             >
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />
             </Link>
@@ -68,7 +68,7 @@ const AdminSiteCreationPage: NextPage = () => {
           />
           {/* todo: address lookup / lat-lon-address inputs */}
           <button
-            className="flex flex-row justify-center rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600"
+            className="flex flex-row justify-center rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600 transition-colors"
             type="submit"
           >
             Create Site
