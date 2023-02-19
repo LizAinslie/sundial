@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import AdminHeader from "../../../components/AdminHeader";
 import PageLayout from "../../../components/PageLayout";
 import { getServerAuthSession } from "../../../server/auth";
+import { api } from "../../../utils/api";
 
 const AdminSiteCreationPage: FC = () => {
   const [name, setName] = useState('');
@@ -14,8 +16,20 @@ const AdminSiteCreationPage: FC = () => {
   const [lat, setLat] = useState(0);
   const [lon, setLon] = useState(0);
 
+  const createSiteMutation = api.sites.createSite.useMutation();
+
+  const router = useRouter();
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+
+    const siteId = await createSiteMutation.mutateAsync({
+      name: name === '' ? undefined : name,
+      address,
+      lat, lon,
+    });
+
+    router.push(`/admin/sites/${siteId}`);
   }
 
   return (
