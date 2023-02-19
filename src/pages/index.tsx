@@ -5,6 +5,14 @@ import { api } from "../utils/api";
 import PageLayout from "../components/PageLayout";
 import GpsGate from "../components/GpsGate";
 import MapTile from "../components/MapTile";
+import { FC } from "react";
+import useLocation from "../utils/hooks/useLocation";
+
+const HomeMap: FC = () => {
+  const { latitude, longitude } = useLocation();
+
+  return <MapTile lat={latitude} lon={longitude} />;
+}
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
@@ -19,7 +27,7 @@ const Home: NextPage = () => {
       <PageLayout>
         <GpsGate>
           <div className="flex flex-grow flex-col gap-4 p-4">
-            <MapTile />
+            <HomeMap />
           </div>
         </GpsGate>
       </PageLayout>

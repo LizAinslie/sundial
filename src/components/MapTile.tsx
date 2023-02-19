@@ -6,11 +6,13 @@ import {
 } from "@react-google-maps/api";
 import { env } from "../env.mjs";
 import { FC, memo, useCallback, useState } from "react";
-import useLocation from "../utils/hooks/useLocation";
 
-const MapTile: FC = () => {
-  const location = useLocation();
+type MapTileProps = {
+  lat: number;
+  lon: number;
+};
 
+const MapTile: FC<MapTileProps> = ({ lat, lon }) => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: env.NEXT_PUBLIC_GOOGLE_MAPS_KEY,
@@ -20,8 +22,8 @@ const MapTile: FC = () => {
 
   const onLoad = useCallback((map: google.maps.Map) => {
     const bounds = new window.google.maps.LatLngBounds({
-      lat: location.latitude,
-      lng: location.longitude,
+      lat,
+      lng: lon,
     });
 
     map.fitBounds(bounds);
@@ -39,12 +41,12 @@ const MapTile: FC = () => {
         height: "25vh",
         borderRadius: "0.375rem",
       }}
-      center={{ lat: location.latitude, lng: location.longitude }}
+      center={{ lat, lng: lon }}
       zoom={10}
       onLoad={onLoad}
       onUnmount={onUnmount}
     >
-      <Marker position={{ lat: location.latitude, lng: location.longitude }} />
+      <Marker position={{ lat, lng: lon }} />
     </GoogleMap>
   ) : (
     <></>
