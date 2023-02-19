@@ -11,7 +11,7 @@ import { api } from "../../../utils/api";
 
 const CreateUserPage: NextPage = () => {
   const [username, setUsername] = useState('');
-  const [createdPassword, setCreatedPassword] = useState('jhdcsvcjhavdjhgvgahvhagjvahvcahjcvhaj');
+  const [createdPassword, setCreatedPassword] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [newUserId, setNewUserId] = useState('');
   
