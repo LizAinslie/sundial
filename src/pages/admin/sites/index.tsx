@@ -4,7 +4,6 @@ import { Site } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { FC } from "react";
 import AdminList from "../../../components/AdminList";
 import AdminNav from "../../../components/AdminNav";
@@ -35,7 +34,6 @@ const SiteCard: FC<SiteCardProps> = ({ site }) => {
 };
 
 const AdminSitesPage: FC = () => {
-  const router = useRouter();
   const sitesQuery = api.sites.getSites.useQuery();
 
   return (
@@ -46,7 +44,7 @@ const AdminSitesPage: FC = () => {
       </Head>
       <PageLayout>
         <AdminNav />
-        <AdminList create={() => void router.push('/admin/sites/create')}>
+        <AdminList create="/admin/sites/create">
           {sitesQuery.data && sitesQuery.data.map((it) => (<SiteCard site={it} />))}
         </AdminList>
       </PageLayout>

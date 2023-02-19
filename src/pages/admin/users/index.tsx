@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { FC } from "react";
 import AdminList from "../../../components/AdminList";
 import AdminNav from "../../../components/AdminNav";
@@ -34,7 +33,6 @@ const UserCard: FC<UserCardProps> = ({ user }) => {
 
 const AdminUsersList: NextPage = () => {
   const usersQuery = api.admin.getUsers.useQuery();
-  const router = useRouter()
 
   return (
     <>
@@ -44,7 +42,7 @@ const AdminUsersList: NextPage = () => {
       </Head>
       <PageLayout>
         <AdminNav />
-        <AdminList create={async () => await router.push('/admin/users/create')}>
+        <AdminList create="/admin/users/create">
           {usersQuery.data && usersQuery.data.map(user => (<UserCard user={user} />))}
         </AdminList>
       </PageLayout>
