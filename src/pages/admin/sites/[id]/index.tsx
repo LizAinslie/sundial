@@ -2,7 +2,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Site } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
+import Head, { defaultHead } from "next/head";
 import Link from "next/link";
 import AdminHeader from "../../../../components/AdminHeader";
 import MapTile from "../../../../components/MapTile";
@@ -74,4 +74,6 @@ export const getServerSideProps: GetServerSideProps<
     },
   };
 };
+
+export default ViewSitePage;
 
