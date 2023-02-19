@@ -13,7 +13,7 @@ const AdminNav: FC = () => {
         <Link
           href="/admin/users"
           className={classNames(
-            "rounded-md px-4 py-3 font-bold text-sky-900 hover:bg-sky-300 hover:bg-opacity-50 transition-colors",
+            "btn-muted font-bold",
             {
               "bg-sky-500 text-white hover:bg-sky-600 hover:bg-opacity-100":
                 router.asPath === "/admin/users",
@@ -26,7 +26,7 @@ const AdminNav: FC = () => {
         <Link
           href="/admin"
           className={classNames(
-            "rounded-md px-4 py-3 font-bold text-sky-900 hover:bg-sky-300 hover:bg-opacity-50 transition-colors",
+            "btn-muted font-bold",
             {
               "bg-sky-500 text-white hover:bg-sky-600 hover:bg-opacity-100":
                 router.asPath === "/admin",
@@ -39,7 +39,7 @@ const AdminNav: FC = () => {
         <Link
           href="/admin/sites"
           className={classNames(
-            "rounded-md px-4 py-3 font-bold text-sky-900 hover:bg-sky-300 hover:bg-opacity-50 transition-colors",
+            "btn-muted font-bold",
             {
               "bg-sky-500 text-white hover:bg-sky-600 hover:bg-opacity-100":
                 router.asPath === "/admin/sites",

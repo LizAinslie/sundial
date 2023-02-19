@@ -29,7 +29,7 @@ const SiteCard: FC<SiteCardProps> = ({ site }) => {
         <div className="flex h-full flex-row items-center">
           <Link
             href={`/admin/sites/${site.id}/edit`}
-            className="aspect-square rounded-md py-2.5 px-3.5 hover:bg-sky-300 hover:bg-opacity-50 transition-colors transition-opacity"
+            className="btn-muted aspect-square py-2.5 px-3.5"
           >
             <FontAwesomeIcon
               fixedWidth

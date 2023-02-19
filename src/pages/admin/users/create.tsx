@@ -44,7 +44,7 @@ const AdminUserCreationPage: NextPage = () => {
           <div className="flex flex-row items-center gap-4">
             <Link
               href="/admin/users"
-              className="flex flex-row items-center gap-2 rounded-md bg-sky-500 p-3 text-white hover:bg-sky-600 transition-colors"
+              className="btn-primary p-3"
             >
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />
             </Link>
@@ -68,7 +68,7 @@ const AdminUserCreationPage: NextPage = () => {
 
               <Link
                 href={`/admin/users/${newUserId}`}
-                className="align-self-center mt-4 flex flex-row justify-center rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600 transition-colors"
+                className="btn-primary align-self-center mt-4"
                 type="submit"
               >
                 Go to User
@@ -82,7 +82,7 @@ const AdminUserCreationPage: NextPage = () => {
               onSubmit={handleSubmit}
             >
               <input
-                className="rounded-md border-none bg-white px-4 py-3 outline-none autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)] focus:border-none focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="input"
                 value={username}
                 onChange={(e: ChangeEvent) =>
                   void setUsername((e.target as HTMLInputElement).value)
@@ -92,7 +92,7 @@ const AdminUserCreationPage: NextPage = () => {
                 placeholder="Username"
               />
               <button
-                className="flex flex-row justify-center rounded-md bg-sky-500 px-4 py-3 text-white hover:bg-sky-600 transition-colors"
+                className="btn-primary"
                 type="submit"
               >
                 Create User
