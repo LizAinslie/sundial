@@ -15,7 +15,8 @@ model Site {
     id String @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    address String @db.Text
+    lat Float
+    lon Float
     name String? @db.Text
     enabled Boolean @default(true)
     events Event[]
@@ -31,6 +32,8 @@ model Session {
 
 model User {
     id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt @default(now()) // added later so needs default
     username String @db.VarChar(32) @unique
     admin Boolean @default(false)
     passwordHash String
@@ -50,6 +53,9 @@ enum EventType {
 
 model Event {
     id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
     userId String
     siteId String
     time DateTime

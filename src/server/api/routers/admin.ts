@@ -32,4 +32,11 @@ export const adminRouter = createTRPCRouter({
       password,
     };
   }),
+
+  createSite: protectedProcedure.input(z.object({
+    name: z.string(),
+    lat: z.number(),
+    lon: z.number(),
+  })).mutation(async ({ ctx }) => {
+  }),
 });
