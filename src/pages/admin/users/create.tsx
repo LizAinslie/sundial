@@ -9,7 +9,7 @@ import PageLayout from "../../../components/PageLayout";
 import { getServerAuthSession } from "../../../server/auth";
 import { api } from "../../../utils/api";
 
-const CreateUserPage: NextPage = () => {
+const AdminUserCreationPage: NextPage = () => {
   const [username, setUsername] = useState('');
   const [createdPassword, setCreatedPassword] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -92,5 +92,5 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   };
 };
 
-export default CreateUserPage;
+export default AdminUserCreationPage;
 

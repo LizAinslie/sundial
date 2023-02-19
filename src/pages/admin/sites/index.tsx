@@ -1,6 +1,7 @@
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Site } from "@prisma/client";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -8,6 +9,7 @@ import { FC } from "react";
 import AdminList from "../../../components/AdminList";
 import AdminNav from "../../../components/AdminNav";
 import PageLayout from "../../../components/PageLayout";
+import { getServerAuthSession } from "../../../server/auth";
 import { api } from "../../../utils/api";
 
 type SiteCardProps = {
@@ -50,6 +52,22 @@ const AdminSitesPage: FC = () => {
     </>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  // admins only
+  const session = await getServerAuthSession({ req, res });
+  if (!session?.user.admin) return {
+    redirect: {
+      destination: '/',
+      permanent: false,
+    },
+  };
+
+  return {
+    props: {},
+  };
+};
+
 
 export default AdminSitesPage;
 
