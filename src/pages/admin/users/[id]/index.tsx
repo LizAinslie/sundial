@@ -1,27 +1,25 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { ChangeEvent, useState } from "react";
+import { FC } from "react";
 import AdminHeader from "../../../../components/AdminHeader";
 import PageLayout from "../../../../components/PageLayout";
 import { getServerAuthSession } from "../../../../server/auth";
 import { prisma } from "../../../../server/db";
 import { StrippedUser } from "../../../../utils/stripSensitiveValues";
 
-type EditUserPageProps = {
+type ViewUserPageProps = {
   user: StrippedUser;
 };
 
-const EditUserPage: NextPage<EditUserPageProps> = ({ user: serverUser }) => {
-  const [user, setUser] = useState(serverUser); 
-
+const ViewUserPage: FC<ViewUserPageProps> = ({ user }) => {
   return (
     <>
       <Head>
-        <title>Edit User - Sundial Admin</title>
-        <meta name="theme-color" content="#bae6fd" />
+        <title>User {user.username} - Sundial Admin</title>
+
       </Head>
       <PageLayout>
         <AdminHeader>
@@ -31,17 +29,19 @@ const EditUserPage: NextPage<EditUserPageProps> = ({ user: serverUser }) => {
             </Link>
 
             <div className="flex flex-col flex-grow">
-              <span className="font-bold">Editing {user.username}{user.admin && ' (admin)'}</span>
+              <span className="font-bold">Viewing {user.username}{user.admin && ' (admin)'}</span>
               <span className="text-sm">{user.id}</span>
             </div>
           </div>
         </AdminHeader>
+        {/* todo: user feed */}
       </PageLayout>
     </>
   );
-};
+}
 
-export const getServerSideProps: GetServerSideProps<EditUserPageProps> = async ({ params, req, res }) => {
+
+export const getServerSideProps: GetServerSideProps<ViewUserPageProps> = async ({ params, req, res }) => {
   // admins only
   const session = await getServerAuthSession({ req, res });
   if (!session?.user.admin) return {
@@ -66,5 +66,5 @@ export const getServerSideProps: GetServerSideProps<EditUserPageProps> = async (
   };
 };
 
-export default EditUserPage;
+export default ViewUserPage;
 
