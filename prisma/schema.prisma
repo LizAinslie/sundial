@@ -15,6 +15,7 @@ model Site {
     id String @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    address String @db.Text
     lat Float
     lon Float
     name String? @db.Text
