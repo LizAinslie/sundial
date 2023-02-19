@@ -25,7 +25,7 @@ const ViewSitePage: NextPage<ViewSitePageProps> = ({ site }) => {
         <AdminHeader>
           <div className="flex flex-row gap-4">
             <Link
-              href="/admin/users"
+              href="/admin/sites"
               className="btn-primary p-3"
             >
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />

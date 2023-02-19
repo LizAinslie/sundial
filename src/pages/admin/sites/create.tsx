@@ -43,7 +43,7 @@ const AdminSiteCreationPage: NextPage = () => {
         <AdminHeader>
           <div className="flex flex-row items-center gap-4">
             <Link
-              href="/admin/users"
+              href="/admin/sites"
               className="btn-primary p-3 aspect-square"
             >
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />
