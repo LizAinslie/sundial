@@ -28,7 +28,7 @@ const EditUserPage: NextPage<EditUserPageProps> = ({ user: serverUser }) => {
           <div className="flex flex-row gap-4">
             <Link
               href="/admin/users"
-              className="btn-primary p-3"
+              className="btn-primary p-3 aspect-square"
             >
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />
             </Link>
@@ -71,7 +71,7 @@ export const getServerSideProps: GetServerSideProps<
 
   return {
     props: {
-      user,
+      user: JSON.parse(JSON.stringify(user)),
     },
   };
 };

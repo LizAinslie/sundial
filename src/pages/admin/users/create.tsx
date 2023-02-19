@@ -44,7 +44,7 @@ const AdminUserCreationPage: NextPage = () => {
           <div className="flex flex-row items-center gap-4">
             <Link
               href="/admin/users"
-              className="btn-primary p-3"
+              className="btn-primary p-3 aspect-square"
             >
               <FontAwesomeIcon fixedWidth icon={faArrowLeft} />
             </Link>
