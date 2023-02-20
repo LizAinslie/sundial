@@ -7,6 +7,8 @@ import GpsGate from "../components/GpsGate";
 import MapTile from "../components/MapTile";
 import { FC } from "react";
 import useLocation from "../utils/hooks/useLocation";
+import SiteSearch from "../components/SiteSearch";
+import { Site } from "@prisma/client";
 
 const HomeMap: FC = () => {
   const { latitude, longitude } = useLocation();
@@ -16,6 +18,10 @@ const HomeMap: FC = () => {
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
+
+  function onSiteSelected(site: Site) {
+    // todo
+  }
 
   return (
     <>
@@ -28,6 +34,8 @@ const Home: NextPage = () => {
         <GpsGate>
           <div className="flex flex-grow flex-col gap-4 p-4">
             <HomeMap />
+
+            <SiteSearch onSelect={onSiteSelected} />
           </div>
         </GpsGate>
       </PageLayout>

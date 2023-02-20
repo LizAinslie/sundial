@@ -50,6 +50,8 @@ enum EventType {
     CLOCK_OUT
     BREAK_OUT
     BREAK_IN
+    START_TRAVEL
+    STOP_TRAVEL
 }
 
 model Event {
