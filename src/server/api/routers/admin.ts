@@ -5,10 +5,16 @@ import { stripUser } from "../../../utils/stripSensitiveValues";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const adminRouter = createTRPCRouter({
-  getUsers: protectedProcedure.query(async ({ ctx }) => {
+  getUsers: protectedProcedure.input(z.object({
+    enabled: z.boolean().optional().default(true),
+  })).query(async ({ ctx, input }) => {
     if (!ctx.session.user.admin) throw "Admin only.";
 
-    const users = await ctx.prisma.user.findMany();
+    const users = await ctx.prisma.user.findMany({
+      where: {
+        enabled: input.enabled,
+      },
+    });
 
     // return a list of users with password hashes stripped
     return users.map(stripUser);

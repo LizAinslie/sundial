@@ -2,8 +2,14 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const sitesRouter = createTRPCRouter({
-  getSites: protectedProcedure.query(async ({ ctx }) => {
-    const sites = await ctx.prisma.site.findMany();
+  getSites: protectedProcedure.input(z.object({
+    enabled: z.boolean().optional().default(true),
+  })).query(async ({ ctx, input }) => {
+    const sites = await ctx.prisma.site.findMany({
+      where: {
+        enabled: input.enabled,
+      },
+    });
     return sites;
   }),
   createSite: protectedProcedure
