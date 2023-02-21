@@ -18,6 +18,7 @@ export const timeClockRouter = createTRPCRouter({
 
     return { success: true };
   }),
+
   clockOut: protectedProcedure.mutation(async ({ ctx }) => {
     const user = await ctx.prisma.user.findUnique({
       where: {

@@ -36,10 +36,12 @@ const MapTile: FC<MapTileProps> = ({ lat, lon }) => {
 
   return isLoaded ? (
     <GoogleMap
-      mapContainerStyle={{
-        width: "100%",
-        height: "25vh",
-        borderRadius: "0.375rem",
+      mapContainerClassName="w-full h-[25vh] rounded-md"
+      options={{
+        disableDefaultUI: true,
+        gestureHandling: "none",
+      
+
       }}
       center={{ lat, lng: lon }}
       zoom={10}

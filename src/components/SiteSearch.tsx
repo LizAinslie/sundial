@@ -1,4 +1,7 @@
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Site } from "@prisma/client";
+import classNames from "classnames";
 import { ChangeEvent, FC, useState } from "react";
 
 type SiteSearchProps = {
@@ -11,14 +14,18 @@ const SiteSearch: FC<SiteSearchProps> = ({ onSelect, disabled = false }) => {
 
   return (
     <div className="bg-sky-200 rounded-md flex-col">
-      <div className="px-4 py-3 rounded-t-md border-b border-sky-300">
+      <div className={classNames("rounded-t-md flex flex-row")}>
         <input
           type="text"
           placeholder="Search for a site"
-          className="bg-transparent border-none rounded-tl-md"
+          className="bg-transparent border-none rounded-tl-md px-4 py-3 focus:ring-0 focus:ring-offset-0 flex-grow"
           value={searchTerm}
-          onChange={(e: ChangeEvent) => setSearchTerm((e.target as HTMLInputElement).value)}
+          onChange={(e: ChangeEvent) => 
+            setSearchTerm((e.target as HTMLInputElement).value)}
         />
+        <div className="px-3.5 py-3">
+          <FontAwesomeIcon icon={faMagnifyingGlass} fixedWidth />
+        </div>
       </div>
     </div>
   );

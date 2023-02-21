@@ -40,7 +40,9 @@ const ViewSitePage: NextPage<ViewSitePageProps> = ({ site }) => {
             </div>
           </div>
         </AdminHeader>
-        <MapTile lat={site.lat} lon={site.lon} />
+        <div className="flex flex-grow flex-col p-4 gap-4">
+          <MapTile lat={site.lat} lon={site.lon} />
+        </div>
       </PageLayout>
     </>
   );
@@ -61,7 +63,7 @@ export const getServerSideProps: GetServerSideProps<
 
   const siteId = params!.id as string;
 
-  // look user up in db
+  // look site up in db
   const site = await prisma.site.findUnique({ where: { id: siteId } });
   if (!site)
     return {
