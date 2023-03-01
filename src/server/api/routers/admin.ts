@@ -7,12 +7,12 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const adminRouter = createTRPCRouter({
   getUsers: protectedProcedure.input(z.object({
     enabled: z.boolean().optional().default(true),
-  })).query(async ({ ctx, input }) => {
+  }).optional()).query(async ({ ctx, input }) => {
     if (!ctx.session.user.admin) throw "Admin only.";
 
     const users = await ctx.prisma.user.findMany({
       where: {
-        enabled: input.enabled,
+        enabled: input?.enabled,
       },
     });
 

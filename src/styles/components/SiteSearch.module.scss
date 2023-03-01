@@ -1,0 +1,32 @@
+.siteSearch {
+  @apply bg-sky-200 rounded-md flex flex-col;
+
+  .inputBar {
+    @apply rounded-t-md flex flex-row;
+
+    .input {
+      @apply bg-transparent border-none rounded-tl-md px-4 py-3 focus:ring-0
+      focus:ring-offset-0 flex-grow placeholder:text-sky-800;
+    }
+  }
+
+  &.open .inputBar {
+    @apply border-b border-sky-300;
+  }
+  
+  .siteList {
+    @apply flex flex-col rounded-b-md;
+
+    .site {
+      @apply flex flex-col px-4 py-2;
+
+      &:not(:last-child) {
+        @apply border-b border-sky-300/50;
+      }
+
+      &:last-child {
+        @apply rounded-b-md;
+      }
+    }
+  }
+}

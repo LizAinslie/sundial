@@ -1,13 +1,14 @@
+import { Site } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const sitesRouter = createTRPCRouter({
   getSites: protectedProcedure.input(z.object({
     enabled: z.boolean().optional().default(true),
-  })).query(async ({ ctx, input }) => {
+  }).optional()).query(async ({ ctx, input }) => {
     const sites = await ctx.prisma.site.findMany({
       where: {
-        enabled: input.enabled,
+        enabled: input?.enabled,
       },
     });
     return sites;
@@ -34,4 +35,27 @@ export const sitesRouter = createTRPCRouter({
 
       return newSite.id;
     }),
+
+  search: protectedProcedure.input(z.object({
+    query: z.string(),
+  })).query(async ({ ctx, input }) => {
+    if (input.query === '') return [];
+    return await ctx.prisma.site.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: input.query,
+            },
+          },
+          {
+            address: {
+              contains: input.query,
+            },
+          },
+        ],
+        enabled: true,
+      },
+    });
+  }),
 });
