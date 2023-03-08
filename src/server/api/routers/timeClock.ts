@@ -4,8 +4,27 @@ import { prisma } from "../../db";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const timeClockRouter = createTRPCRouter({
+  getLastClockState: protectedProcedure.query(async ({ ctx }) => {
+    const userEvents = await ctx.prisma.event.findMany({
+      orderBy: {
+        time: 'desc',
+      },
+      take: 1,
+      include: {
+        site: true,
+      },
+      where: {
+        userId: ctx.session.user.id!,
+      },
+    });
+
+    return userEvents[0] ?? null;
+  }),
+
   clockIn: protectedProcedure.input(z.object({
     siteId: z.string(),
+    lat: z.number(),
+    lon: z.number(),
   })).mutation(async ({ ctx, input }) => {
     await ctx.prisma.event.create({
       data: {
@@ -13,43 +32,62 @@ export const timeClockRouter = createTRPCRouter({
         siteId: input.siteId,
         type: EventType.CLOCK_IN,
         time: new Date(),
+        lat: input.lat,
+        lon: input.lon,
       },
     });
 
     return { success: true };
   }),
 
-  clockOut: protectedProcedure.mutation(async ({ ctx }) => {
-    const user = await ctx.prisma.user.findUnique({
-      where: {
-        id: ctx.session.user.id,
+  startTravel: protectedProcedure.input(z.object({
+    lat: z.number(),
+    lon: z.number(),
+  })).mutation(async ({ ctx, input }) => {
+    const userEvents = await ctx.prisma.event.findMany({
+      orderBy: {
+        time: 'desc',
       },
+      take: 1,
       include: {
-        events: {
-          orderBy: {
-            time: 'desc',
-          },
-          take: 1,
-          include: {
-            site: true,
-          },
-        },
+        site: true,
+      },
+      where: {
+        userId: ctx.session.user.id!,
       },
     });
 
-    // This branch should never be reached. If this method ever returns like
-    // this, what the fuck?
-    if (!user) return {
+    if (userEvents.length === 0) return {
       success: false,
-      message: 'Logged in user does not exist.'
+      message: 'You has no previous clock state.',
     };
 
-    if (user.events.length === 0) return {
+    const latestEvent = userEvents[0]!;
+  }),
+
+  clockOut: protectedProcedure.input(z.object({
+    lat: z.number(),
+    lon: z.number(),
+  })).mutation(async ({ ctx, input }) => {
+    const userEvents = await ctx.prisma.event.findMany({
+      orderBy: {
+        time: 'desc',
+      },
+      take: 1,
+      include: {
+        site: true,
+      },
+      where: {
+        userId: ctx.session.user.id!,
+      },
+    });
+
+    if (userEvents.length === 0) return {
       success: false,
-      message: 'You has no previous clock in.',
+      message: 'You has no previous clock state.',
     };
 
-    const latestEvent = user.events[0]!;
+    const latestEvent = userEvents[0]!;
 
     // if the user hasn't clocked in, don't let them clock out. lmao
     if (latestEvent.type === EventType.CLOCK_OUT) return {
@@ -59,10 +97,12 @@ export const timeClockRouter = createTRPCRouter({
 
     await prisma.event.create({
       data: {
-        userId: user.id,
+        userId: ctx.session.user.id!,
         siteId: latestEvent.siteId,
         type: EventType.CLOCK_OUT,
         time: new Date(),
+        lat: input.lat,
+        lon: input.lon,
       },
     });
 

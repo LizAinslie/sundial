@@ -13,10 +13,16 @@ type SiteSearchProps = {
 
 const SiteSearch: FC<SiteSearchProps> = ({ onSelect, disabled = false }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const searchSite = api.sites.search.useQuery({ query: searchTerm });
+  const searchSite = api.sites.search.useQuery({ query: searchTerm }, {
+    onSuccess() {
+      setOpen(true);
+    },
+  });
+  const [open, setOpen] = useState(false); 
 
   function selectSite(site: Site) {
-    setSearchTerm('');
+    setSearchTerm(site.name ?? site.address);
+    setOpen(false);
     onSelect(site);
   }
 
@@ -40,7 +46,7 @@ const SiteSearch: FC<SiteSearchProps> = ({ onSelect, disabled = false }) => {
           <FontAwesomeIcon icon={faMagnifyingGlass} fixedWidth />
         </div>
       </div>
-      <div className={siteSearchStyles.siteList}>
+      {open && <div className={siteSearchStyles.siteList}>
         {searchSite.data && searchSite.data.map(site => 
           <div
             className={siteSearchStyles.site}
@@ -52,7 +58,7 @@ const SiteSearch: FC<SiteSearchProps> = ({ onSelect, disabled = false }) => {
             </> : <span className="font-bold">{site.address}</span>}
           </div>
         )}
-      </div>
+      </div>}
     </div>
   );
 };

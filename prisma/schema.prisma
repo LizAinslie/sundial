@@ -59,6 +59,8 @@ model Event {
     id String @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    lat Float
+    lon Float
 
     userId String
     siteId String

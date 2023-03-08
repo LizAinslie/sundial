@@ -5,10 +5,11 @@ import { api } from "../utils/api";
 import PageLayout from "../components/PageLayout";
 import GpsGate from "../components/GpsGate";
 import MapTile from "../components/MapTile";
-import { FC } from "react";
+import { FC, useState } from "react";
 import useLocation from "../utils/hooks/useLocation";
 import SiteSearch from "../components/SiteSearch";
 import { Site } from "@prisma/client";
+import TimeClock from "../components/TimeClock";
 
 const HomeMap: FC = () => {
   const { latitude, longitude } = useLocation();
@@ -18,9 +19,11 @@ const HomeMap: FC = () => {
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
+  const [site, setSite] = useState<Site>();
+  const [clockedIn, setClockedIn] = useState(false);
 
   function onSiteSelected(site: Site) {
-    // todo
+    setSite(site);
   }
 
   return (
@@ -35,7 +38,17 @@ const Home: NextPage = () => {
           <div className="flex flex-grow flex-col gap-4 p-4">
             <HomeMap />
 
-            <SiteSearch onSelect={onSiteSelected} />
+            <SiteSearch onSelect={onSiteSelected} disabled={clockedIn} />
+
+            {site && <TimeClock
+              site={site}
+              onClockIn={() => {
+                setClockedIn(true);
+              }}
+              onClockOut={() => {
+                setClockedIn(false);
+              }}
+            />}
           </div>
         </GpsGate>
       </PageLayout>
