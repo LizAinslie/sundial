@@ -69,7 +69,7 @@ const ClockedIn: FC<ClockStateProps & ClockOutProps> = ({ time, siteId, onClocke
   
   return (
     <div className="rounded-lg p-4 bg-sky-200 flex flex-col gap-4">
-      <div className="flex gap-4">
+      <div className="flex gap-4 items-end">
         <span className="text-lg font-bold">Clocked In</span>
         <span className="text-sky-700"><ReactTimeago date={time} /></span>
       </div>
@@ -124,7 +124,7 @@ const OnBreak: FC<ClockStateProps & ClockOutProps> = ({ time, siteId, onClockedO
 
   return (
     <div className="rounded-lg p-4 bg-sky-200 flex flex-col gap-4">
-      <div className="flex gap-4">
+      <div className="flex gap-4 items-end">
         <span className="text-lg font-bold">On Break</span>
         <span className="text-sky-700"><ReactTimeago date={time} /></span>
       </div>
@@ -168,7 +168,7 @@ const OnTravel: FC<ClockStateProps & ClockOutProps> = ({ time, siteId, onClocked
 
   return (
     <div className="rounded-lg p-4 bg-sky-200 flex flex-col gap-4">
-      <div className="flex gap-4">
+      <div className="flex gap-4 items-end">
         <span className="text-lg font-bold">In Transit</span>
         <span className="text-sky-700"><ReactTimeago date={time} /></span>
       </div>

@@ -1,4 +1,4 @@
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faMapPin, faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Site, Event, User, EventType } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
@@ -44,16 +44,24 @@ const SiteEvent: FC<SiteEventProps> = ({ event }) => {
   }
 
   return (
-    <button
-      className="rounded-md bg-sky-200 px-2 py-1.5 flex flex-col gap-1.5"
-      onClick={() => void setOpen(!open)}
+    <div
+      className="rounded-md bg-sky-200 px-2 py-1.5 flex flex-col gap-1.5" 
     >
-      <span>
-        <Link href={`/admin/users/${event.userId}`} className="font-bold">{event.user.username}</Link>
-        {' ' + action}
-      </span>
+      <div className="flex items-center">
+        <span>
+          <Link href={`/admin/users/${event.userId}`} className="font-bold">{event.user.username}</Link>
+          {' ' + action}
+        </span>
+        <div className="flex-grow" />
+        <FontAwesomeIcon
+          className="cursor-pointer"
+          onClick={() => void setOpen(!open)}
+          icon={faMapPin}
+          fixedWidth
+        />
+      </div>
       {open && <MapTile lat={event.lat} lon={event.lon} />}
-    </button>
+    </div>
   );
 };
 
@@ -87,6 +95,13 @@ const ViewSitePage: NextPage<ViewSitePageProps> = ({ site }) => {
               </span>
               <span className="text-sm">{site.id}</span>
             </div>
+            
+            <Link
+              href={`/admin/sites/${site.id}/edit`}
+              className="btn-primary p-3"
+            >
+              <FontAwesomeIcon fixedWidth icon={faPencil} />
+            </Link>
           </div>
         </AdminHeader>
         <div className="flex flex-grow flex-col p-4 gap-4">
