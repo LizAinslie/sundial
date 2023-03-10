@@ -43,62 +43,110 @@ export const timeClockRouter = createTRPCRouter({
   startTravel: protectedProcedure.input(z.object({
     lat: z.number(),
     lon: z.number(),
+    siteId: z.string(),
   })).mutation(async ({ ctx, input }) => {
-    const userEvents = await ctx.prisma.event.findMany({
-      orderBy: {
-        time: 'desc',
-      },
-      take: 1,
-      include: {
-        site: true,
-      },
-      where: {
+    await prisma.event.create({
+      data: {
         userId: ctx.session.user.id!,
+        siteId: input.siteId,
+        type: EventType.START_TRAVEL,
+        time: new Date(),
+        lat: input.lat,
+        lon: input.lon,
       },
     });
 
-    if (userEvents.length === 0) return {
-      success: false,
-      message: 'You has no previous clock state.',
-    };
-
-    const latestEvent = userEvents[0]!;
+    return { success: true };
   }),
+
+  stopTravel: protectedProcedure.input(z.object({
+    lat: z.number(),
+    lon: z.number(),
+    siteId: z.string(),
+    clockOut: z.boolean().optional().default(false),
+  })).mutation(async ({ ctx, input }) => {
+    await prisma.event.create({
+      data: {
+        userId: ctx.session.user.id!,
+        siteId: input.siteId,
+        type: EventType.STOP_TRAVEL,
+        time: new Date(),
+        lat: input.lat,
+        lon: input.lon,
+      },
+    });
+
+    if (input.clockOut) await prisma.event.create({
+      data: {
+        userId: ctx.session.user.id!,
+        siteId: input.siteId,
+        type: EventType.CLOCK_OUT,
+        time: new Date(),
+        lat: input.lat,
+        lon: input.lon,
+      },
+    });
+
+    return { success: true };
+  }),
+
+  startBreak: protectedProcedure.input(z.object({
+    lat: z.number(),
+    lon: z.number(),
+    siteId: z.string(),
+  })).mutation(async ({ ctx, input }) => {
+    await prisma.event.create({
+      data: {
+        userId: ctx.session.user.id!,
+        siteId: input.siteId,
+        type: EventType.BREAK_OUT,
+        time: new Date(),
+        lat: input.lat,
+        lon: input.lon,
+      },
+    });
+  }),
+
+  stopBreak: protectedProcedure.input(z.object({
+    lat: z.number(),
+    lon: z.number(),
+    siteId: z.string(),
+    clockOut: z.boolean().optional().default(false),
+  })).mutation(async ({ ctx, input }) => {
+    await prisma.event.create({
+      data: {
+        userId: ctx.session.user.id!,
+        siteId: input.siteId,
+        type: EventType.BREAK_IN,
+        time: new Date(),
+        lat: input.lat,
+        lon: input.lon,
+      },
+    });
+
+    if (input.clockOut) await prisma.event.create({
+      data: {
+        userId: ctx.session.user.id!,
+        siteId: input.siteId,
+        type: EventType.CLOCK_OUT,
+        time: new Date(),
+        lat: input.lat,
+        lon: input.lon,
+      },
+    });
+
+  }),
+
 
   clockOut: protectedProcedure.input(z.object({
     lat: z.number(),
     lon: z.number(),
+    siteId: z.string(),
   })).mutation(async ({ ctx, input }) => {
-    const userEvents = await ctx.prisma.event.findMany({
-      orderBy: {
-        time: 'desc',
-      },
-      take: 1,
-      include: {
-        site: true,
-      },
-      where: {
-        userId: ctx.session.user.id!,
-      },
-    });
-
-    if (userEvents.length === 0) return {
-      success: false,
-      message: 'You has no previous clock state.',
-    };
-
-    const latestEvent = userEvents[0]!;
-
-    // if the user hasn't clocked in, don't let them clock out. lmao
-    if (latestEvent.type === EventType.CLOCK_OUT) return {
-      success: false,
-      message: 'You are already clocked out',
-    };
-
     await prisma.event.create({
       data: {
         userId: ctx.session.user.id!,
-        siteId: latestEvent.siteId,
+        siteId: input.siteId,
         type: EventType.CLOCK_OUT,
         time: new Date(),
         lat: input.lat,
