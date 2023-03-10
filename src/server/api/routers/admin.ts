@@ -45,4 +45,26 @@ export const adminRouter = createTRPCRouter({
         password,
       };
     }),
+
+  getEventsForSite: protectedProcedure.input(z.object({
+    siteId: z.string(),
+  })).query(({ ctx, input }) => ctx.prisma.event.findMany({
+    where: {
+      siteId: input.siteId,
+    },
+    include: {
+      user: true,
+    },
+  })),
+  
+  getEventsForUser: protectedProcedure.input(z.object({
+    userId: z.string(),
+  })).query(({ ctx, input }) => ctx.prisma.event.findMany({
+    where: {
+      userId: input.userId,
+    },
+    include: {
+      site: true,
+    },
+  })),
 });

@@ -1,20 +1,69 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Site } from "@prisma/client";
+import { Site, Event, User, EventType } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
-import Head, { defaultHead } from "next/head";
+import Head from "next/head";
 import Link from "next/link";
+import { FC, useState } from "react";
 import AdminHeader from "../../../../components/AdminHeader";
 import MapTile from "../../../../components/MapTile";
 import PageLayout from "../../../../components/PageLayout";
 import { getServerAuthSession } from "../../../../server/auth";
 import { prisma } from "../../../../server/db";
+import { api } from "../../../../utils/api";
+
+type SiteEventProps = {
+  event: Event & {
+    user: User;
+  };
+};
+
+const SiteEvent: FC<SiteEventProps> = ({ event }) => {
+  const [open, setOpen] = useState(false);
+
+  let action = '';
+  switch (event.type) {
+    case EventType.CLOCK_IN:
+      action = "clocked in.";
+      break;
+    case EventType.CLOCK_OUT:
+      action = "clocked out.";
+      break;
+    case EventType.BREAK_IN:
+      action = "started their lunch.";
+      break;
+    case EventType.BREAK_OUT:
+      action = "ended their lunch.";
+      break;
+    case EventType.START_TRAVEL:
+      action = "started transit.";
+      break;
+    case EventType.STOP_TRAVEL:
+      action = "stopped transit.";
+      break;
+  }
+
+  return (
+    <button
+      className="rounded-md bg-sky-200 px-2 py-1.5 flex flex-col gap-1.5"
+      onClick={() => void setOpen(!open)}
+    >
+      <span>
+        <Link href={`/admin/users/${event.userId}`} className="font-bold">{event.user.username}</Link>
+        {' ' + action}
+      </span>
+      {open && <MapTile lat={event.lat} lon={event.lon} />}
+    </button>
+  );
+};
 
 type ViewSitePageProps = {
   site: Site;
 };
 
 const ViewSitePage: NextPage<ViewSitePageProps> = ({ site }) => {
+  const getEventsQuery = api.admin.getEventsForSite.useQuery({ siteId: site.id });
+
   return (
     <>
       <Head>
@@ -42,6 +91,12 @@ const ViewSitePage: NextPage<ViewSitePageProps> = ({ site }) => {
         </AdminHeader>
         <div className="flex flex-grow flex-col p-4 gap-4">
           <MapTile lat={site.lat} lon={site.lon} />
+          <div className="flex-grow">
+            <div className="flex flex-col gap-4">
+              {getEventsQuery.data && getEventsQuery.data.map((event) => 
+                <SiteEvent event={event} />)}
+            </div>
+          </div>
         </div>
       </PageLayout>
     </>

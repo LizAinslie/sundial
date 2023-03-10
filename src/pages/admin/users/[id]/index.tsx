@@ -1,19 +1,71 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Event, EventType, Site } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { FC, useState } from "react";
 import AdminHeader from "../../../../components/AdminHeader";
+import MapTile from "../../../../components/MapTile";
 import PageLayout from "../../../../components/PageLayout";
 import { getServerAuthSession } from "../../../../server/auth";
 import { prisma } from "../../../../server/db";
+import { api } from "../../../../utils/api";
 import { StrippedUser } from "../../../../utils/stripSensitiveValues";
+
+type UserEventProps = {
+  event: Event & {
+    site: Site;
+  };
+};
+
+const UserEvent: FC<UserEventProps> = ({ event }) => {
+  const [open, setOpen] = useState(false);
+
+  let action = '';
+  switch (event.type) {
+    case EventType.CLOCK_IN:
+      action = "Clocked in at";
+      break;
+    case EventType.CLOCK_OUT:
+      action = "Clocked out at";
+      break;
+    case EventType.BREAK_IN:
+      action = "Started their lunch at";
+      break;
+    case EventType.BREAK_OUT:
+      action = "Ended their lunch at";
+      break;
+    case EventType.START_TRAVEL:
+      action = "Started transit at";
+      break;
+    case EventType.STOP_TRAVEL:
+      action = "Stopped transit at";
+      break;
+  }
+
+  return (
+    <button
+      className="rounded-md bg-sky-200 px-2 py-1.5 flex flex-col gap-1.5"
+      onClick={() => void setOpen(!open)}
+    >
+      <span>
+        {action + ' '}
+        <Link href={`/admin/sites/${event.siteId}`} className="font-bold">{event.site.name ?? event.site.address}</Link> 
+      </span>
+      {open && <MapTile lat={event.lat} lon={event.lon} />}
+    </button>
+  );
+};
+
 
 type ViewUserPageProps = {
   user: StrippedUser;
 };
 
 const ViewUserPage: NextPage<ViewUserPageProps> = ({ user }) => {
+  const userEventsQuery = api.admin.getEventsForUser.useQuery({ userId: user.id });
+
   return (
     <>
       <Head>
@@ -39,7 +91,14 @@ const ViewUserPage: NextPage<ViewUserPageProps> = ({ user }) => {
             </div>
           </div>
         </AdminHeader>
-        {/* todo: user feed */}
+        <div className="flex flex-grow flex-col p-4 gap-4">
+          <div className="flex-grow">
+            <div className="flex flex-col gap-4">
+              {userEventsQuery.data && userEventsQuery.data.map((event) => 
+                <UserEvent event={event} />)}
+            </div>
+          </div>
+        </div>
       </PageLayout>
     </>
   );

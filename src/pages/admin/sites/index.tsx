@@ -19,13 +19,16 @@ const SiteCard: FC<SiteCardProps> = ({ site }) => {
   return (
     <>
       <div className="flex flex-row rounded-md bg-sky-200 p-2">
-        <div className="flex flex-grow flex-col">
+        <Link 
+          className="flex flex-grow flex-col" 
+          href={`/admin/sites/${site.id}`}
+        >
           <span className="font-bold">
             {site.name}
             {!site.enabled && " (disabled)"}
           </span>
           <span className="text-sm">{site.id}</span>
-        </div>
+        </Link>
         <div className="flex h-full flex-row items-center">
           <Link
             href={`/admin/sites/${site.id}/edit`}
@@ -56,7 +59,7 @@ const AdminSitesPage: NextPage = () => {
         <AdminNav />
         <AdminList create="/admin/sites/create">
           {sitesQuery.data &&
-            sitesQuery.data.map((it) => <SiteCard site={it} />)}
+            sitesQuery.data.map((it) => <SiteCard site={it} key={it.id} />)}
         </AdminList>
       </PageLayout>
     </>

@@ -4,19 +4,19 @@ import Link from "next/link";
 import { FC, PropsWithChildren } from "react";
 
 type AdminListProps = {
-  create: string;
+  create?: string;
 } & PropsWithChildren;
 
 const AdminList: FC<AdminListProps> = ({ children, create }) => {
   return (
     <div className="flex flex-grow flex-col gap-4 p-4">
-      <Link
+      {create && <Link
         href={create}
         className="btn-primary"
       >
         <FontAwesomeIcon fixedWidth icon={faPlus} />
         Create
-      </Link>
+      </Link>}
       <div className="flex flex-grow flex-col gap-4 overflow-y-auto">
         {children}
       </div>
