@@ -1,5 +1,6 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Autocomplete from "react-google-autocomplete";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -9,12 +10,13 @@ import AdminHeader from "../../../components/AdminHeader";
 import PageLayout from "../../../components/PageLayout";
 import { getServerAuthSession } from "../../../server/auth";
 import { api } from "../../../utils/api";
+import { env } from '../../../env.mjs';
 
 const AdminSiteCreationPage: NextPage = () => {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState(0);
-  const [lon, setLon] = useState(0);
+  const [lon, setLon] = useState(0); 
 
   const createSiteMutation = api.sites.createSite.useMutation();
 
@@ -65,6 +67,19 @@ const AdminSiteCreationPage: NextPage = () => {
             type="text"
             name="name"
             placeholder="Site name"
+          />
+          <Autocomplete
+            apiKey={env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}
+            options={{
+              types: [],
+            }}
+            onPlaceSelected={(place) => {
+              setAddress(place.formatted_address ?? '');
+              setLat(place.geometry?.location?.lat() ?? 0)
+              setLon(place.geometry?.location?.lng() ?? 0)
+            }}
+            className="input"
+            placeholder="Site Address"
           />
           {/* todo: address lookup / lat-lon-address inputs */}
           <button
