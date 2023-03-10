@@ -205,7 +205,6 @@ const OnTravel: FC<ClockStateProps & ClockOutProps> = ({ time, siteId, onClocked
 
 export type TimeClockProps = {
   site: Site;
-  onClockOut?: () => void;
 } & ClockInProps & ClockOutProps;
 
 const TimeClock: FC<TimeClockProps> = ({ site, onClockedIn, onClockedOut }) => {

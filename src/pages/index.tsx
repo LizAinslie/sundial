@@ -42,10 +42,10 @@ const Home: NextPage = () => {
 
             {site && <TimeClock
               site={site}
-              onClockIn={() => {
+              onClockedIn={() => {
                 setClockedIn(true);
               }}
-              onClockOut={() => {
+              onClockedOut={() => {
                 setClockedIn(false);
               }}
             />}
