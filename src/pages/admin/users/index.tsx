@@ -56,8 +56,9 @@ const AdminUsersList: NextPage = () => {
       <PageLayout>
         <AdminNav />
         <AdminList create="/admin/users/create">
-          {usersQuery.data &&
-            usersQuery.data.map((user) => <UserCard user={user} />)}
+          {usersQuery.data && usersQuery.data.map((user) => 
+            <UserCard user={user} key={user.id} />
+          )}
         </AdminList>
       </PageLayout>
     </>
