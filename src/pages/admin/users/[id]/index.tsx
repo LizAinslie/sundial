@@ -1,4 +1,8 @@
-import { faArrowLeft, faMapPin, faPencil } from "@fortawesome/free-solid-svg-icons";
+import { 
+  faArrowLeft,
+  faMapPin,
+  faPencil
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Event, EventType, Site } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
@@ -12,6 +16,10 @@ import { getServerAuthSession } from "../../../../server/auth";
 import { prisma } from "../../../../server/db";
 import { api } from "../../../../utils/api";
 import { StrippedUser } from "../../../../utils/stripSensitiveValues";
+import dateFormat from 'dateformat';
+import { groupEvents } from "../../../../utils/eventGrouping";
+import { formatDuration } from "../../../../utils/formatDuration";
+import { calculateTimeWorked } from "../../../../utils/calculateTime";
 
 type UserEventProps = {
   event: Event & {
@@ -51,12 +59,14 @@ const UserEvent: FC<UserEventProps> = ({ event }) => {
       <div className="flex items-center">
         <span>
           {action + ' '}
-          <Link href={`/admin/sites/${event.siteId}`} className="font-bold">{event.site.name ?? event.site.address}</Link>
+          <Link href={`/admin/sites/${event.siteId}`} className="font-bold">
+            {event.site.name ?? event.site.address}
+          </Link>
         </span>
         <div className="flex-grow" />
         <FontAwesomeIcon
           className="cursor-pointer"
-          onClick={() => void setOpen(!open)}
+          onClick={() => setOpen(!open)}
           icon={faMapPin}
           fixedWidth
         />
@@ -72,7 +82,9 @@ type ViewUserPageProps = {
 };
 
 const ViewUserPage: NextPage<ViewUserPageProps> = ({ user }) => {
-  const userEventsQuery = api.admin.getEventsForUser.useQuery({ userId: user.id });
+  const userEventsQuery = api.admin.getEventsForUser.useQuery({
+    userId: user.id
+  });
 
   return (
     <>
@@ -109,8 +121,30 @@ const ViewUserPage: NextPage<ViewUserPageProps> = ({ user }) => {
         <div className="flex flex-grow flex-col p-4 gap-4">
           <div className="flex-grow">
             <div className="flex flex-col gap-4">
-              {userEventsQuery.data && userEventsQuery.data.map((event) => 
-                <UserEvent event={event} />)}
+              {userEventsQuery.data && groupEvents(userEventsQuery.data).map(
+                (eventGroup, index) => <div 
+                  className="flex flex-col"
+                  key={index}
+                >
+                  <h2 className="text-xl mb-4">
+                    {dateFormat(
+                      eventGroup.events[0]!.time,
+                      "dddd, mmmm d, yyyy"
+                    )}
+                    {' - '}
+                    {formatDuration(calculateTimeWorked(eventGroup))}
+                  </h2>
+                  
+                  <div className="flex flex-col gap-2">
+                    {eventGroup.events.map(event => 
+                      <UserEvent
+                        event={event}
+                        key={event.id}
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

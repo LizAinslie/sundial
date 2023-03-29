@@ -25,6 +25,7 @@
     "@types/moment-duration-format": "^2.2.3",
     "bcrypt": "^5.1.0",
     "classnames": "^2.3.2",
+    "dateformat": "^5.0.3",
     "moment": "^2.29.4",
     "moment-duration-format": "^2.3.2",
     "next": "13.1.6",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
     "@types/bcrypt": "^5.0.0",
+    "@types/dateformat": "^5.0.0",
     "@types/moment": "^2.13.0",
     "@types/node": "^18.11.18",
     "@types/prettier": "^2.7.2",
