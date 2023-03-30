@@ -10,6 +10,7 @@ import { prisma } from "./db";
 import * as bcrypt from "bcrypt";
 import { User } from "@prisma/client";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { StrippedUser, stripUser } from "../utils/stripSensitiveValues";
 
 /**
  * Module augmentation for `next-auth` types.
@@ -20,7 +21,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
  **/
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: Partial<User>;
+    user: StrippedUser;
   }
 
   // interface User {
@@ -37,14 +38,16 @@ declare module "next-auth" {
  **/
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, token }) {
+    async session({ session, token }) {
       if (token.user) {
         const tokenUser = token.user as User;
-        session.user = {
-          username: tokenUser.username,
-          id: tokenUser.id,
-          admin: tokenUser.admin,
-        };
+        const userData = await prisma.user.findUniqueOrThrow({
+          where: {
+            id: tokenUser.id,
+          },
+        });
+
+        session.user = stripUser(userData);
       }
       // console.log(session)
 

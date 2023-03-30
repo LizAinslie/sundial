@@ -3,19 +3,35 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import AdminHeader from "../../../../components/AdminHeader";
 import PageLayout from "../../../../components/PageLayout";
 import { getServerAuthSession } from "../../../../server/auth";
 import { prisma } from "../../../../server/db";
-import { StrippedUser } from "../../../../utils/stripSensitiveValues";
+import { api } from "../../../../utils/api";
+import { 
+  StrippedUser, stripUser
+} from "../../../../utils/stripSensitiveValues";
 
 type EditUserPageProps = {
   user: StrippedUser;
 };
 
 const EditUserPage: NextPage<EditUserPageProps> = ({ user: serverUser }) => {
-  const [user, setUser] = useState(serverUser);
+  const [user] = useState(serverUser);
+  const router = useRouter()
+  const expirePasswordMutation = api.admin.expirePasswordForUser.useMutation({
+    onSuccess() {
+      location.reload();
+    },
+  });
+
+  const setUserEnabledMutation = api.admin.setUserEnabled.useMutation({
+    onSuccess() {
+      location.reload();
+    },
+  });
 
   return (
     <>
@@ -42,6 +58,49 @@ const EditUserPage: NextPage<EditUserPageProps> = ({ user: serverUser }) => {
             </div>
           </div>
         </AdminHeader>
+
+        {user.enabled ? 
+          <div className="flex flex-col p-4 gap-4">
+            <h2 className="text-xl">Danger Zone</h2>
+            <button 
+              className="btn-danger"
+              disabled={user.expirePassword}
+              onClick={async () => {
+                await expirePasswordMutation.mutateAsync({ userId: user.id });
+              }}
+            >
+              Force Password Reset
+            </button>
+            <button 
+              className="btn-danger" 
+              onClick={async () => {
+                await setUserEnabledMutation.mutateAsync({
+                  userId: user.id,
+                  enabled: false,
+                });
+              }}
+            >
+              Disable {user.username}
+            </button>
+          </div>
+        :
+          <div className="flex flex-col p-4 gap-4 items-center justify-center">
+            <h2 className="text-2xl">
+              User Disabled
+            </h2>
+            <button
+              className="btn-primary"
+              onClick={async () => {
+                await setUserEnabledMutation.mutateAsync({
+                  userId: user.id,
+                  enabled: true,
+                });
+              }}
+            >
+              Enable {user.username}
+            </button>
+          </div>
+        }
       </PageLayout>
     </>
   );
@@ -69,9 +128,10 @@ export const getServerSideProps: GetServerSideProps<
       notFound: true,
     };
 
+    console.log(user);
   return {
     props: {
-      user: JSON.parse(JSON.stringify(user)),
+      user: JSON.parse(JSON.stringify(stripUser(user))),
     },
   };
 };

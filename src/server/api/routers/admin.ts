@@ -36,6 +36,7 @@ export const adminRouter = createTRPCRouter({
         data: {
           username: input.username,
           passwordHash: hashSync(password, 12),
+          expirePassword: true,
         },
       });
 
@@ -67,4 +68,40 @@ export const adminRouter = createTRPCRouter({
       site: true,
     },
   })),
+
+  expirePasswordForUser: protectedProcedure.input(z.object({
+    userId: z.string(),
+  })).mutation(async ({ ctx, input }) => {
+    if (!ctx.session.user.admin) throw "Admin only.";
+    
+    await ctx.prisma.user.update({
+      where: { id: input.userId },
+      data: { expirePassword: true },
+    });
+  }),
+
+  setUserEnabled: protectedProcedure.input(z.object({
+    userId: z.string(),
+    enabled: z.boolean(),
+  })).mutation(async ({ ctx, input }) => {
+    if (!ctx.session.user.admin) throw "Admin only.";
+    await ctx.prisma.user.update({
+      where: { id: input.userId },
+      data: { enabled: input.enabled },
+    });
+  }),
+
+  resetPassword: protectedProcedure.input(z.object({
+    newPassword: z.string(),
+  })).mutation(async ({ ctx, input }) => {
+    await ctx.prisma.user.update({
+      where: {
+        id: ctx.session.user.id!
+      },
+      data: {
+        passwordHash: hashSync(input.newPassword, 12),
+        expirePassword: false,
+      },
+    });
+  }),
 });
