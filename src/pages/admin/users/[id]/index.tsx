@@ -1,5 +1,6 @@
 import { 
   faArrowLeft,
+  faList,
   faMapPin,
   faPencil
 } from "@fortawesome/free-solid-svg-icons";
@@ -17,9 +18,16 @@ import { prisma } from "../../../../server/db";
 import { api } from "../../../../utils/api";
 import { StrippedUser } from "../../../../utils/stripSensitiveValues";
 import dateFormat from 'dateformat';
-import { groupEvents } from "../../../../utils/eventGrouping";
+import {
+  groupEventsByWeek,
+  groupEventsByDay,
+  TypedEventGroup
+} from "../../../../utils/eventGrouping";
 import { formatDuration } from "../../../../utils/formatDuration";
 import { calculateTimeWorked } from "../../../../utils/calculateTime";
+import { warn } from "console";
+import classNames from "classnames";
+
 
 type UserEventProps = {
   event: Event & {
@@ -54,7 +62,7 @@ const UserEvent: FC<UserEventProps> = ({ event }) => {
 
   return (
     <div
-      className="rounded-md bg-sky-200 px-2 py-1.5 flex flex-col gap-1.5"
+      className="rounded-md bg-sky-300 px-2 py-1.5 flex flex-col gap-1.5"
     >
       <div className="flex items-center">
         <span>
@@ -76,6 +84,83 @@ const UserEvent: FC<UserEventProps> = ({ event }) => {
   );
 };
 
+type EventGroupingProps<T = {}> = {
+  group: TypedEventGroup<T>
+};
+
+const DailyEventGrouping: FC<EventGroupingProps<{ site: Site }>> = ({
+  group
+}) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="rounded-md bg-sky-200 p-2 flex flex-col gap-2">
+      <div className="flex items-center justify-between gap-4">
+        <h3 className="text-lg flex flex-col gap-1">
+          {dateFormat(
+            group.events[0]!.time,
+            "dddd, mmmm d, yyyy"
+          )}
+          <span className="text-sky-700 text-sm">
+            {formatDuration(calculateTimeWorked(group))}
+          </span>
+        </h3>
+        <button 
+          className={classNames(
+            open ? "btn-primary" : "btn-muted",
+            "px-3 py-3.5"
+          )}
+          onClick={() => setOpen(!open)}
+        >
+          <FontAwesomeIcon
+            className="cursor-pointer"
+            icon={faList}
+            fixedWidth
+          />
+        </button>
+      </div>
+      {open &&
+        <div className="flex flex-col gap-1.5">
+          {group.events.map((it) => <UserEvent event={it} key={it.id} />)}
+        </div>
+      }
+    </div>
+  );
+};
+
+const WeeklyEventGrouping: FC<EventGroupingProps<{ site: Site }>> = ({
+  group,
+}) => {
+  const firstDate = group.events[0]!.time;
+  const monday = new Date();
+  monday.setDate(firstDate.getDate() - (firstDate.getDay() || 7) + 1);
+  
+  return (
+    <div className="flex flex-col">
+      <h2 className="text-lg mb-4 flex flex-col gap-1">
+        <>
+          Week Of
+          {dateFormat(
+            monday,
+            " mmmm d, yyyy"
+          )}
+        </>
+        <span className="text-sky-700 text-sm">
+          {formatDuration(calculateTimeWorked(group))}
+        </span>
+      </h2>
+
+      <div className="flex flex-col gap-2">
+        {groupEventsByDay(group.events).map((group, dailyIndex) => 
+          <DailyEventGrouping
+            group={group}
+            key={dailyIndex}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
 
 type ViewUserPageProps = {
   user: StrippedUser;
@@ -121,30 +206,10 @@ const ViewUserPage: NextPage<ViewUserPageProps> = ({ user }) => {
         <div className="flex flex-grow flex-col p-4 gap-4">
           <div className="flex-grow">
             <div className="flex flex-col gap-4">
-              {userEventsQuery.data && groupEvents(userEventsQuery.data).map(
-                (eventGroup, index) => <div 
-                  className="flex flex-col"
-                  key={index}
-                >
-                  <h2 className="text-xl mb-4">
-                    {dateFormat(
-                      eventGroup.events[0]!.time,
-                      "dddd, mmmm d, yyyy"
-                    )}
-                    {' - '}
-                    {formatDuration(calculateTimeWorked(eventGroup))}
-                  </h2>
-                  
-                  <div className="flex flex-col gap-2">
-                    {eventGroup.events.map(event => 
-                      <UserEvent
-                        event={event}
-                        key={event.id}
-                      />
-                    )}
-                  </div>
-                </div>
-              )}
+              {userEventsQuery.data && groupEventsByWeek(userEventsQuery.data)
+                .map((eventGroup, index) => 
+                  <WeeklyEventGrouping group={eventGroup}key={index} />)
+              }
             </div>
           </div>
         </div>

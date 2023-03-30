@@ -24,8 +24,8 @@
 
   .btn-muted {
     @apply
-      rounded-md px-4 py-3 hover:bg-sky-300 hover:bg-opacity-50 transition 
-      duration-200 ease-in-out;
+      flex flex-row items-center justify-center gap-2 rounded-md px-4 py-3
+      hover:bg-sky-300 hover:bg-opacity-50 transition duration-200 ease-in-out;
   }
 
   .input {
